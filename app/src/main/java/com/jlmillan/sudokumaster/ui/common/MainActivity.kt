@@ -1,4 +1,4 @@
-package com.jlmillan.sudokumaster
+package com.jlmillan.sudokumaster.ui.common
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
