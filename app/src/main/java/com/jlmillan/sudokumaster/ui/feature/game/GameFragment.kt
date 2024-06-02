@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.sudoku.ui.theme.SudokuTheme
+import com.jlmillan.sudokumaster.ui.theme.SudokuTheme
 
 class GameFragment : Fragment() {
 
