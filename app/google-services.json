@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "358257783456",
+    "project_id": "sudokumaster-cc4a8",
+    "storage_bucket": "sudokumaster-cc4a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358257783456:android:9ad363ab519e523b444fc5",
+        "android_client_info": {
+          "package_name": "com.jlmillan.sudokumaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBznWo4gzXm-aO2cy64nwgpDh_RnJaV3Dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

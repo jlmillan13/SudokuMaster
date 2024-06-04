@@ -13,7 +13,6 @@
     <string name="error_username_not_exist">Usuario o contraseña inválidas</string>
     <string name="error_unknown">Error de autenticación, por favor, inténtelo de nuevo</string>
     <string name="have_account_login">¿No tiene cuenta? Regístrese</string>
-    <string name="have_account_login">¿</string>
     <string name="login_password">Contraseña</string>
     <string name="login_home">Inicio sesión</string>
     <string name="login_button">INICIO SESIÓN</string>

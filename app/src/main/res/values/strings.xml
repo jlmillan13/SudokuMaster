@@ -4,7 +4,6 @@
     <string name="main_description">You need login or register to explore all features</string>
     <string name="home_register">Register</string>
     <string name="home_login">Login</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="error_empty_field">This field can\'t be empty</string>
     <string name="error_not_equals_field">%1$s must be equals</string>
