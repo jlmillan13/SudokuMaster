@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SudokuMaster</string>
+    <string name="main_description">You need login or register to explore all features</string>
+    <string name="home_register">Registro</string>
+    <string name="home_login">Inicie sesión</string>
+    <string name="error_empty_field">Este apartado no puede estar vacío</string>
+    <string name="error_privacy_check">Debe aceptar los términos de privacidad</string>
+    <string name="passwords">Contraseñas</string>
+    <string name="error_email_exist">El email ya existe</string>
+    <string name="error_wrong_password">Usuario o contraseña inválidas</string>
+    <string name="error_username_exist">El usuario ya existe</string>
+    <string name="error_username_not_exist">Usuario o contraseña inválidas</string>
+    <string name="error_unknown">Error de autenticación, por favor, inténtelo de nuevo</string>
+    <string name="have_account_login">¿No tiene cuenta? Regístrese</string>
+    <string name="have_account_login">¿</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_home">Inicio sesión</string>
+    <string name="login_button">INICIO SESIÓN</string>
+    <string name="register_home">REGISTRO</string>
+    <string name="login_error">Email o contraseña incorrectos</string>
+    <string name="already_account_text">¿Ya tiene cuenta? Inicie sesión</string>
+    <string name="register_button_text">REGISTRO</string>
+    <string name="checkbox_text">Registrándose, acepta las políticas de privacidad y los términos de uso de la aplicación</string>
+    <string name="repeat_password_hint">Repetir Contraseña</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="repeat_email_hint">Repetir email</string>
+    <string name="name_hint">Nombre</string>
+    <string name="register_text">Registro</string>
+</resources>
