@@ -8,5 +8,5 @@ interface AuthRepository {
     suspend fun login(username: String, password: String): Pair<Boolean, AuthErrorException?>
     suspend fun isLogged(): Boolean
     suspend fun getUser(): UserModel
-    suspend fun editName(newUserName: String): Boolean
+
 }

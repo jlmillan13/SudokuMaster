@@ -1,7 +1,6 @@
 package com.jlmillan.sudokumaster.data.auth
 
 import android.util.Log
-import com.jlmillan.sudokumaster.USER_COLLECTION
 import com.jlmillan.sudokumaster.data.common.CacheManager
 import com.jlmillan.sudokumaster.data.dto.UserDTO
 import com.jlmillan.sudokumaster.data.dto.toModel
@@ -18,6 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
+import com.jlmillan.sudokumaster.ui.USER_COLLECTION
 import kotlinx.coroutines.tasks.await
 
 object AuthRemoteDataSource {
@@ -115,36 +115,4 @@ object AuthRemoteDataSource {
         return userDto?.copy(hashId = userSnapshot.id)?.toModel()
     }
 
-    suspend fun markFavorite(id: String): UserModel {
-        val user = getRemoteUser()
-        val list = user?.favorites?.toMutableList() ?: mutableListOf()
-        if (list.contains(id)) {
-            list.remove(id)
-        } else {
-            list.add(id)
-        }
-        val updatedUser = user?.copy(favorites = list)
-        Firebase.firestore
-            .collection(USER_COLLECTION)
-            .document(user?.hashId.orEmpty())
-            .update("favorites", updatedUser?.favorites)
-            .await()
-        return getRemoteUser() ?: UserModel()
-    }
-
-    suspend fun editName(newName: String): Pair<UserModel?, Boolean> {
-        return try {
-            val user = getRemoteUser()
-            val userToUpdate = user?.copy(name = newName)
-            Firebase.firestore
-                .collection(USER_COLLECTION)
-                .document(user?.hashId.orEmpty())
-                .update("name", userToUpdate?.name)
-                .await()
-            val updatedUser = getRemoteUser()
-            updatedUser to true
-        } catch (e: Exception) {
-            null to false
-        }
-    }
 }

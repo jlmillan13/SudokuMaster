@@ -11,7 +11,7 @@
         android:id="@+id/main_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/teal_700"
+        android:background="@color/pale_cyan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,7 +33,7 @@
                 android:id="@+id/main_toolbar_title"
                 android:layout_width="0dp"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/text_description"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginHorizontal="16dp"

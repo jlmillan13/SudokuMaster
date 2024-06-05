@@ -11,8 +11,9 @@
     <color name="light_mint">#DDEFE7</color>
     <color name="light_seafoam">#DAEDE7</color>
     <color name="very_light_cyan">#DDEFFB</color>
-
-
+    <color name="text_black">#1A1C29</color>
+    <color name="text_description">#797979</color>
+    <color name="white_with_alpha">#80FFFFFF</color>
     <color name="pale_cyan">#A4DBE6</color>
     <color name="pale_sky_blue">#A5DCE7</color>
     <color name="very_light_blue">#A5DAE6</color>
