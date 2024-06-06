@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
 import com.jlmillan.sudokumaster.ui.common.MainActivity
-import com.jlmillan.sudokumaster.ui.feature.home.HomeFragmentDirections
+import com.jlmillan.sudokumaster.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null

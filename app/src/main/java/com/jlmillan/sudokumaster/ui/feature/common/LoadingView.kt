@@ -22,7 +22,7 @@ fun LoadingView(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .background(color = colorResource(id = R.color.white).copy(alpha = alpha))
+            .background(color = colorResource(id = R.color.white_sudoku).copy(alpha = alpha))
             .alpha(alpha)
     ) {
         CircularProgressIndicator(

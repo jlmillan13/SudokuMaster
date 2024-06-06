@@ -37,44 +37,6 @@ class MainActivity : AppCompatActivity() {
         binding?.mainLoading?.root?.show(loading)
     }
 
-    fun showFavorite(active: Boolean, action: () -> Unit) {
-        with(binding?.mainToolbarStartIcon) {
-            this?.show(true, hideType = View.INVISIBLE)
-            this?.setImageResource(if (active) R.drawable.ic_favorite_fill else R.drawable.ic_favorite_border)
-            this?.setOnClickListener {
-                action()
-            }
-        }
-    }
-
-    fun showProfile(visible: Boolean, action: () -> Unit) {
-        with(binding?.mainToolbarEndIcon) {
-            this?.show(visible, hideType = View.INVISIBLE)
-            this?.setImageResource(R.drawable.ic_account_circle)
-            this?.setOnClickListener {
-                action()
-            }
-        }
-    }
-
-    fun showDone(visible: Boolean, action: () -> Unit) {
-        with(binding?.mainToolbarEndIcon) {
-            this?.show(visible, hideType = View.INVISIBLE)
-            this?.setImageResource(R.drawable.ic_check)
-            this?.setOnClickListener {
-                action()
-            }
-        }
-    }
-
-    fun hideStartIcon() {
-        binding?.mainToolbarStartIcon?.show(false, hideType = View.INVISIBLE)
-    }
-
-    fun hideEndIcon() {
-        binding?.mainToolbarEndIcon?.show(false, hideType = View.INVISIBLE)
-    }
-
     override fun onStart() {
         super.onStart()
         Log.e("LIFECYCLE", "onStart")

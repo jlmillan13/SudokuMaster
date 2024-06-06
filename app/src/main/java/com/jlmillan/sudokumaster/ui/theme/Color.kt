@@ -14,6 +14,10 @@ val LightMint = Color(0xFFDDEFE7)
 val LightSeafoam = Color(0xFFDAEDE7)
 val VeryLightCyan = Color(0xFFDDEFFB)
 
+val TextBlack = Color(0xFF1A1C29)
+val TextDescription = Color(0xFF797979)
+val WhiteWithAlpha = Color(0x8080FFFFFF)
+
 val PaleCyan = Color(0xFFA4DBE6)
 val PaleSkyBlue = Color(0xFFA5DCE7)
 val VeryLightBlue = Color(0xFFA5DAE6)

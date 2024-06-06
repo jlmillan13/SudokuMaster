@@ -1,6 +1,6 @@
 package com.jlmillan.sudokumaster.data.dto
 
-data class GameProgressDTO(
+data class GameProgress(
     val userId: String = "",
     val puzzle: List<List<Int>> = listOf(),
     val selectedRow: Int = -1,

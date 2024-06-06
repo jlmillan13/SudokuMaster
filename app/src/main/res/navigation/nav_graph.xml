@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -50,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.jlmillan.sudokumaster.ui.feature.game.GameFragment"
+        android:name="com.jlmillan.sudokumaster.ui.feature.sudoku.GameFragment"
         android:label="GameFragment" >
         <action
             android:id="@+id/action_gameFragment_to_mainFragment"
