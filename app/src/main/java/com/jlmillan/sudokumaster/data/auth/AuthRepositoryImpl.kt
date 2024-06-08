@@ -1,12 +1,12 @@
 package com.jlmillan.sudokumaster.data.auth
 
-import com.jlmillan.sudokumaster.data.common.CacheManager
 import com.jlmillan.sudokumaster.domain.feature.auth.AuthRepository
 import com.jlmillan.sudokumaster.domain.model.AuthErrorException
 import com.jlmillan.sudokumaster.domain.model.UserModel
 
 object AuthRepositoryImpl : AuthRepository {
-    override suspend fun register(password: String, email: String): Pair<Boolean, AuthErrorException?> {
+
+    override suspend fun register(password: String,email: String): Pair<Boolean, AuthErrorException?> {
         return AuthRemoteDataSource.register(password, email)
     }
 

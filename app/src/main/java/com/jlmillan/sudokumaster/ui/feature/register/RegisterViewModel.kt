@@ -10,22 +10,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RegisterViewModel : ViewModel() {
-    private val registerSuccessLiveData by lazy {
-        MutableLiveData<Pair<Boolean, AuthErrorException?>>()
-    }
-    private val registerLoadingLiveData by lazy {
-        MutableLiveData<Boolean>()
-    }
 
-    fun registerSuccessLiveData() : LiveData<Pair<Boolean, AuthErrorException?>> = registerSuccessLiveData
-    fun registerLoadingLiveData() : LiveData<Boolean> = registerLoadingLiveData
+    private val registerSuccessLiveData = MutableLiveData<Pair<Boolean, AuthErrorException?>>()
+    private val registerLoadingLiveData = MutableLiveData<Boolean>()
+
+    fun registerSuccessLiveData(): LiveData<Pair<Boolean, AuthErrorException?>> = registerSuccessLiveData
+    fun registerLoadingLiveData(): LiveData<Boolean> = registerLoadingLiveData
 
     fun register(password: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            registerLoadingLiveData.postValue(true) // Pantalla en modo carga
+            registerLoadingLiveData.postValue(true)
             val result = AuthRepositoryImpl.register(password, email)
-            registerSuccessLiveData.postValue(result) // Retorno el valor del registro
-            registerLoadingLiveData.postValue(false) // Quito pantalla en modo carga
+            registerSuccessLiveData.postValue(result)
+            registerLoadingLiveData.postValue(false)
+        }
+    }
+
+    private fun getErrorMessage(authError: AuthErrorException?): String {
+        return when (authError) {
+//            AuthErrorException.USER_ALREADY_EXIST -> "El usuario ya existe, debe utilizar otro nombre de usuario"
+            AuthErrorException.EMAIL_EXIST -> "El email ya existe, debe utilizar otro nombre de usuario"
+            AuthErrorException.UNKNOWN -> "Ha ocurrido un error al realizar el registro"
+            else -> "Error desconocido"
         }
     }
 }

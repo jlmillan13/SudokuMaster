@@ -1,184 +1,122 @@
 package com.jlmillan.sudokumaster.ui.feature.register
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
 import com.jlmillan.sudokumaster.databinding.FragmentRegisterBinding
 import com.jlmillan.sudokumaster.domain.model.AuthErrorException
 import com.jlmillan.sudokumaster.ui.common.MainActivity
-import com.jlmillan.sudokumaster.ui.common.extension.isTrue
 import com.jlmillan.sudokumaster.ui.common.extension.showToast
+import com.jlmillan.sudokumaster.ui.common.extension.validateEmail
+import com.jlmillan.sudokumaster.ui.feature.register.RegisterViewModel
+
 
 class RegisterFragment : Fragment() {
+    var binding: FragmentRegisterBinding? = null
+    val viewModel: RegisterViewModel by viewModels()
 
-    private var binding: FragmentRegisterBinding? = null
-    private val viewModel: RegisterViewModel by viewModels()
+    private fun getEmail() = binding?.emailRegister?.text.toString()
+    private fun getRepeatEmail() = binding?.repeatEmailRegister?.text.toString()
+    private fun getPassword() = binding?.passwordRegister?.text.toString()
+    private fun getRepeatPassword() = binding?.repeatPasswordRegister?.text.toString()
 
+    private fun showError(exception: AuthErrorException) {
+        @StringRes val errorResId = when(exception) {
+            AuthErrorException.EMAIL_EXIST -> R.string.error_email_already_exist
+            AuthErrorException.INVALID_EMAIL_OR_PASSWORD -> R.string.error_invalid_email_password
+            AuthErrorException.UNKNOWN -> R.string.error_unknown
+            else -> R.string.error_unknown
+        }
+        showToast(getString(errorResId))
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterBinding.inflate(inflater)
-        setUpView()
-        return binding?.root
-    }
+        setUpClickListener()
 
-    private fun setUpView() {
-        binding?.registerButton?.setOnClickListener {
-            if (validateFields()) {
-                viewModel.register(
-                    email = getEmail(),
-                    password = getPassword()
-                )
-            }
-        }
-
-        compareFieldsWhenTextChanged(ValidateField.EMAIL_REPEAT, ValidateField.EMAIL)
-        compareFieldsWhenTextChanged(ValidateField.PASSWORD_REPEAT, ValidateField.PASSWORD)
-    }
-
-    private fun getEmail() = binding?.email?.text.toString().trim()
-
-    private fun getPassword() = binding?.password?.text.toString().trim()
-
-    private fun getPrivacyCheck() = binding?.checkbox
-
-    private fun isPrivacyChecked() = getPrivacyCheck()?.isChecked.isTrue()
-
-    private fun validateFields(): Boolean {
-        var result = true
-        ValidateField.entries.forEach { field ->
-            val fieldEditText = getField(field)
-            when(field) {
-                ValidateField.USERNAME,
-                ValidateField.NAME,
-                ValidateField.EMAIL,
-                ValidateField.PASSWORD -> {
-                    if (validateIsNotBlank(fieldEditText).not()){
-                        result = false
-                        return@forEach
-                    }
-                }
-                ValidateField.EMAIL_REPEAT -> {
-                    val validateIsNotBlank = validateIsNotBlank(fieldEditText)
-                    if(validateIsNotBlank.not() || validateIsEqual(fieldEditText, getEmail(), R.string.emails).not()) {
-                        result = false
-                        return@forEach
-                    }
-                }
-                ValidateField.PASSWORD_REPEAT -> {
-                    val validateIsNotBlank = validateIsNotBlank(fieldEditText)
-                    if(validateIsNotBlank.not() || validateIsEqual(fieldEditText, getPassword(), R.string.passwords).not()) {
-                        result = false
-                        return@forEach
-                    }
-                }
-                ValidateField.PRIVACY -> {
-                    val errorText = if (isPrivacyChecked().isTrue().not()) {
-                        result = false
-                        getString(R.string.error_privacy_check)
-                    } else {
-                        null
-                    }
-                    getPrivacyCheck()?.error = errorText
-                    if (result.not()) {
-                        return@forEach
-                    }
-                }
-            }
-        }
-        return result
-    }
-
-    private fun validateIsNotBlank(fieldEditText: EditText?) : Boolean {
-        var result = true
-        fieldEditText?.error = if (fieldEditText?.text.isNullOrBlank()) {
-            result = false
-            getString(R.string.error_empty_field)
-        } else {
-            null
-        }
-        return result
-    }
-
-    private fun validateIsEqual(fieldEditText: EditText?, textToCompare: String, @StringRes fieldResId: Int) : Boolean {
-        var result = true
-        fieldEditText?.error = if (textToCompare.equals(fieldEditText?.text?.trim().toString(), true)) {
-            null
-        } else {
-            result = false
-            getString(R.string.error_not_equals_field, getString(fieldResId))
-        }
-        return result
-    }
-
-    private fun getField(field: ValidateField) : EditText? {
-        return when(field) {
-            ValidateField.EMAIL -> binding?.email
-            ValidateField.EMAIL_REPEAT -> binding?.repeatEmail
-            ValidateField.PASSWORD -> binding?.password
-            ValidateField.PASSWORD_REPEAT -> binding?.repeatPassword
-            else -> null
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         viewModel.registerSuccessLiveData().removeObservers(this)
         viewModel.registerSuccessLiveData().observe(viewLifecycleOwner) { (success, exception) ->
             if (success) {
-                // navigate to main fragment
-            } else {
-                showError(exception)
+                findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
+            }else{
+                showError(exception?: AuthErrorException.UNKNOWN)
             }
         }
-
         viewModel.registerLoadingLiveData().removeObservers(this)
         viewModel.registerLoadingLiveData().observe(viewLifecycleOwner) { loading ->
             (activity as? MainActivity)?.showLoading(loading)
         }
+
+        return binding?.root
     }
 
-    private fun showError(exception: AuthErrorException?) {
-        @StringRes val errorResId = when(exception) {
-            AuthErrorException.EMAIL_EXIST -> R.string.error_email_exist
-            AuthErrorException.WRONG_PASSWORD -> R.string.error_wrong_password
-            AuthErrorException.USERNAME_EXIST -> R.string.error_username_exist
-            AuthErrorException.USERNAME_NOT_EXIST -> R.string.error_username_not_exist
-            else -> R.string.error_unknown
+
+    private fun setUpClickListener() {
+        binding?.alreadyAccount?.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
-        showToast(getString(errorResId))
-    }
-
-    private fun compareFieldsWhenTextChanged(field: ValidateField, fieldToCompare: ValidateField) {
-        val fieldToValidate = getField(field)
-        val fieldToCompareEditText = getField(fieldToCompare)
-        fieldToValidate?.addTextChangedListener { textRepeat ->
-            val textColor = if (textRepeat.toString() == fieldToCompareEditText?.text.toString()) {
-                R.color.black
-            } else {
-                R.color.red_app
+        binding?.registerBtn?.setOnClickListener {
+            if ( validateForm()){
+                viewModel.register(getPassword(), getEmail())
             }
-            fieldToValidate.setTextColor(ResourcesCompat.getColor(resources, textColor, null))
         }
     }
 
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
+    private fun validateForm(): Boolean {
+        var isValid = true
+
+        if (getEmail().isEmpty()) {
+            binding?.emailRegister?.error = context?.getString(R.string.required_field)
+            isValid = false
+        } else if (!getEmail().validateEmail()) {
+            binding?.emailRegister?.error = context?.getString(R.string.invalid_email_address)
+            isValid = false
+        }
+
+        if (getRepeatEmail().isEmpty()) {
+            binding?.repeatEmailRegister?.error = context?.getString(R.string.required_field)
+            isValid = false
+        } else if (getRepeatEmail() != getEmail()) {
+            binding?.repeatEmailRegister?.error = context?.getString(R.string.emails_do_not_match)
+            isValid = false
+        }
+
+        if (getPassword().isEmpty()) {
+            binding?.passwordRegister?.error = context?.getString(R.string.required_field)
+            isValid = false
+        } else if (getPassword().length < 8) {
+            binding?.passwordRegister?.error = context?.getString(R.string.password_min_length)
+            isValid = false
+        }
+
+        if (getRepeatPassword().isEmpty()) {
+            binding?.repeatPasswordRegister?.error = context?.getString(R.string.required_field)
+            isValid = false
+        } else if (getRepeatPassword() != getPassword()) {
+            binding?.repeatPasswordRegister?.error = context?.getString(R.string.passwords_do_not_match)
+            isValid = false
+        }
+
+        return isValid
     }
 
-    enum class ValidateField {
-        USERNAME, NAME, EMAIL, EMAIL_REPEAT, PASSWORD, PASSWORD_REPEAT, PRIVACY
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.showToolbar(false)
+    }
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
+        Log.e("LIFECYCLE", "onDestroy")
     }
 }

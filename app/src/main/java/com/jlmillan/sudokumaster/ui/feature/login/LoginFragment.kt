@@ -62,8 +62,8 @@ import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
 import com.jlmillan.sudokumaster.domain.model.AuthErrorException
 import com.jlmillan.sudokumaster.ui.common.MainActivity
-import com.jlmillan.sudokumaster.ui.common.extension.isEmailFormat
 import com.jlmillan.sudokumaster.ui.common.extension.showToast
+import com.jlmillan.sudokumaster.ui.common.extension.validateEmail
 import com.jlmillan.sudokumaster.ui.feature.common.LoadingView
 import com.jlmillan.sudokumaster.ui.theme.BackgroundInput
 import com.jlmillan.sudokumaster.ui.theme.Black
@@ -122,6 +122,7 @@ class LoginFragment : Fragment() {
             AuthErrorException.USERNAME_EXIST -> R.string.error_username_exist
             AuthErrorException.USERNAME_NOT_EXIST -> R.string.error_username_not_exist
             AuthErrorException.UNKNOWN -> R.string.error_unknown
+            else -> R.string.error_unknown
         }
         showToast(getString(errorResId))
     }
@@ -188,7 +189,7 @@ class LoginFragment : Fragment() {
         var passwordError by remember { mutableStateOf(false) }
 
         fun checkEmailAndPasswordError() : Boolean {
-            if (username.isEmpty() || !username.isEmailFormat()) {
+            if (username.isEmpty() || !username.validateEmail()) {
                 emailError = true
             }
 

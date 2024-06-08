@@ -6,7 +6,6 @@ import com.jlmillan.sudokumaster.data.dto.UserDTO
 import com.jlmillan.sudokumaster.data.dto.toModel
 import com.jlmillan.sudokumaster.domain.model.AuthErrorException
 import com.jlmillan.sudokumaster.domain.model.UserModel
-import com.jlmillan.sudokumaster.ui.common.extension.isEmailFormat
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -17,6 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.jlmillan.sudokumaster.ui.USER_COLLECTION
+import com.jlmillan.sudokumaster.ui.common.extension.validateEmail
 import kotlinx.coroutines.tasks.await
 
 object AuthRemoteDataSource {
@@ -58,7 +58,7 @@ object AuthRemoteDataSource {
 
     suspend fun login(username: String, password: String): Pair<Boolean, AuthErrorException?> {
         return try {
-            val email = if (username.isEmailFormat()) {
+            val email = if (username.validateEmail()) {
                 username
             } else {
                 // GET EMAIL FROM USERNAME

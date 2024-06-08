@@ -1,6 +1,6 @@
 package com.jlmillan.sudokumaster.ui.common.extension
 
-fun String.isEmailFormat(): Boolean {
-    val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
-    return matches(emailRegex)
+fun String.validateEmail(): Boolean{
+    val email =("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())
+    return this.matches(email)
 }
