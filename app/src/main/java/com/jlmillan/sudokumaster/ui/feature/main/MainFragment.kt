@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
-import com.jlmillan.sudokumaster.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
@@ -24,14 +23,10 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val composeView: ComposeView = view.findViewById(R.id.compose_view)
-        composeView.setContent {
-            MainScreen(navController = findNavController())
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MainScreen(navController = findNavController())
+            }
         }
     }
 }
@@ -45,10 +40,10 @@ fun MainScreen(navController: NavController) {
     ) {
         Button(
             onClick = {
-                navController.navigate(R.id.action_mainFragment_to_levelFragment)
+                navController.navigate(R.id.action_mainFragment_to_sudokuFragment)
             }
         ) {
-            Text("Select Level")
+            Text("Play Sudoku")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -58,7 +53,7 @@ fun MainScreen(navController: NavController) {
                 navController.navigate(R.id.action_mainFragment_to_statisticsFragment)
             }
         ) {
-            Text("Statistics")
+            Text("View Statistics")
         }
     }
 }

@@ -6,8 +6,8 @@ import com.jlmillan.sudokumaster.domain.model.AuthErrorException
 import com.jlmillan.sudokumaster.domain.model.UserModel
 
 object AuthRepositoryImpl : AuthRepository {
-    override suspend fun register(username: String, password: String, email: String, name: String): Pair<Boolean, AuthErrorException?> {
-        return AuthRemoteDataSource.register(username, password, email, name)
+    override suspend fun register(password: String, email: String): Pair<Boolean, AuthErrorException?> {
+        return AuthRemoteDataSource.register(password, email)
     }
 
     override suspend fun login(username: String, password: String): Pair<Boolean, AuthErrorException?> {

@@ -1,37 +1,39 @@
 package com.jlmillan.sudokumaster.domain.feature.statistics
 
-
-import com.jlmillan.sudokumaster.data.dto.Statistics
-import com.google.firebase.database.*
+import com.jlmillan.sudokumaster.data.dto.GameProgress
+import com.jlmillan.sudokumaster.data.dto.GameStats
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.tasks.await
 
 class StatisticsRepository {
 
-    private val database: DatabaseReference = FirebaseDatabase.getInstance().getReference("userStats")
+    private val database: DatabaseReference = FirebaseDatabase.getInstance().getReference("games")
 
-    fun getStatistics(callback: (List<Statistics>) -> Unit) {
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val statisticsList = mutableListOf<Statistics>()
-                for (snapshot in dataSnapshot.children) {
-                    val statistics = snapshot.getValue(Statistics::class.java)
-                    statistics?.let { statisticsList.add(it) }
-                }
-                callback(statisticsList)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle possible errors.
-            }
-        })
+    suspend fun saveGameProgress(progress: GameProgress) {
+        val key = progress.userId
+        database.child("progress").child(key).setValue(progress).await()
     }
 
-    fun saveUserStats(statistics: Statistics) {
-        val key = database.push().key
-        key?.let {
-            database.child(it).setValue(statistics)
+    suspend fun getGameProgress(userId: String): GameProgress? {
+        val snapshot = database.child("progress").child(userId).get().await()
+        return snapshot.getValue(GameProgress::class.java)
+    }
+
+    suspend fun saveGameStats(stats: GameStats) {
+        val key = stats.userId
+        database.child("stats").child(key).setValue(stats).await()
+    }
+
+    suspend fun getUserStats(userId: String): List<GameStats> {
+        val snapshot = database.child("stats").child(userId).get().await()
+        val statsList = mutableListOf<GameStats>()
+        for (child in snapshot.children) {
+            val stat = child.getValue(GameStats::class.java)
+            if (stat != null) {
+                statsList.add(stat)
+            }
         }
+        return statsList
     }
 }
-
-

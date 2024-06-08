@@ -38,9 +38,7 @@ class RegisterFragment : Fragment() {
             if (validateFields()) {
                 viewModel.register(
                     email = getEmail(),
-                    username = getUserName(),
-                    password = getPassword(),
-                    name = getName()
+                    password = getPassword()
                 )
             }
         }
@@ -51,11 +49,7 @@ class RegisterFragment : Fragment() {
 
     private fun getEmail() = binding?.email?.text.toString().trim()
 
-    private fun getUserName() = binding?.username?.text.toString().trim()
-
     private fun getPassword() = binding?.password?.text.toString().trim()
-
-    private fun getName() = binding?.name?.text.toString().trim()
 
     private fun getPrivacyCheck() = binding?.checkbox
 
@@ -63,7 +57,7 @@ class RegisterFragment : Fragment() {
 
     private fun validateFields(): Boolean {
         var result = true
-        ValidateField.values().forEach { field ->
+        ValidateField.entries.forEach { field ->
             val fieldEditText = getField(field)
             when(field) {
                 ValidateField.USERNAME,
@@ -130,8 +124,6 @@ class RegisterFragment : Fragment() {
 
     private fun getField(field: ValidateField) : EditText? {
         return when(field) {
-            ValidateField.USERNAME -> binding?.username
-            ValidateField.NAME -> binding?.name
             ValidateField.EMAIL -> binding?.email
             ValidateField.EMAIL_REPEAT -> binding?.repeatEmail
             ValidateField.PASSWORD -> binding?.password

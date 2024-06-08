@@ -20,10 +20,10 @@ class RegisterViewModel : ViewModel() {
     fun registerSuccessLiveData() : LiveData<Pair<Boolean, AuthErrorException?>> = registerSuccessLiveData
     fun registerLoadingLiveData() : LiveData<Boolean> = registerLoadingLiveData
 
-    fun register(username: String, password: String, email: String, name: String) {
+    fun register(password: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             registerLoadingLiveData.postValue(true) // Pantalla en modo carga
-            val result = AuthRepositoryImpl.register(username, password, email, name)
+            val result = AuthRepositoryImpl.register(password, email)
             registerSuccessLiveData.postValue(result) // Retorno el valor del registro
             registerLoadingLiveData.postValue(false) // Quito pantalla en modo carga
         }

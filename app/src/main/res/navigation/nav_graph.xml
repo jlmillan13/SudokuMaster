@@ -45,19 +45,11 @@
         android:name="com.jlmillan.sudokumaster.ui.feature.main.MainFragment"
         android:label="MainFragment" >
         <action
-            android:id="@+id/action_mainFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/gameFragment"
-        android:name="com.jlmillan.sudokumaster.ui.feature.sudoku.SudokuFragment"
-        android:label="GameFragment" >
         <action
-            android:id="@+id/action_gameFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_mainFragment_to_sudokuFragment"
+            app:destination="@id/sudokuFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -65,6 +57,14 @@
         android:label="StatisticsFragment" >
         <action
             android:id="@+id/action_statisticsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sudokuFragment"
+        android:name="com.jlmillan.sudokumaster.ui.feature.sudoku.SudokuFragment"
+        android:label="SudokuFragment" >
+        <action
+            android:id="@+id/action_sudokuFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

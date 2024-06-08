@@ -67,10 +67,10 @@ import com.jlmillan.sudokumaster.ui.common.extension.showToast
 import com.jlmillan.sudokumaster.ui.feature.common.LoadingView
 import com.jlmillan.sudokumaster.ui.theme.BackgroundInput
 import com.jlmillan.sudokumaster.ui.theme.Black
-import com.jlmillan.sudokumaster.ui.theme.Green40
-import com.jlmillan.sudokumaster.ui.theme.HintText
 import com.jlmillan.sudokumaster.ui.theme.LighterBlack
-import com.jlmillan.sudokumaster.ui.theme.Pink40
+import com.jlmillan.sudokumaster.ui.theme.TextDescription
+import com.jlmillan.sudokumaster.ui.theme.VeryLightBlue
+
 
 class LoginFragment : Fragment() {
 
@@ -149,7 +149,7 @@ class LoginFragment : Fragment() {
             TextField(
                 value = value,
                 onValueChange = onValueChange,
-                label = { Text(label, color = HintText) },
+                label = { Text(label, color = TextDescription) },
                 visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
@@ -255,7 +255,7 @@ class LoginFragment : Fragment() {
                         viewModel.login(username, password)
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Green40),
+                colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)

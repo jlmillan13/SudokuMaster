@@ -3,23 +3,27 @@ package com.jlmillan.sudokumaster.ui.feature.statistics
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jlmillan.sudokumaster.data.dto.Statistics
+import androidx.lifecycle.viewModelScope
+import com.jlmillan.sudokumaster.data.dto.GameStats
 import com.jlmillan.sudokumaster.domain.feature.statistics.StatisticsRepository
+import kotlinx.coroutines.launch
 
 class StatisticsViewModel : ViewModel() {
 
     private val repository = StatisticsRepository()
 
-    private val statisticsLiveData = MutableLiveData<List<Statistics>>()
-    val statistics: LiveData<List<Statistics>> get() = statisticsLiveData
+    private val userStatsLiveData = MutableLiveData<List<GameStats>>()
+    val userStats: LiveData<List<GameStats>> get() = userStatsLiveData
 
-    init {
-        loadStatistics()
-    }
-
-    private fun loadStatistics() {
-        repository.getStatistics { statisticsList ->
-            statisticsLiveData.value = statisticsList
+    fun loadUserStats(userId: String) {
+        viewModelScope.launch {
+            try {
+                val stats = repository.getUserStats(userId)
+                userStatsLiveData.value = stats
+            } catch (e: Exception) {
+                // Handle the exception, e.g., log it or show an error message to the user
+                userStatsLiveData.value = emptyList()
+            }
         }
     }
 }

@@ -23,13 +23,11 @@ object AuthRemoteDataSource {
 
     private var auth: FirebaseAuth = Firebase.auth
 
-    suspend fun register(username: String, password: String, email: String, name: String): Pair<Boolean, AuthErrorException?> {
+    suspend fun register(password: String, email: String): Pair<Boolean, AuthErrorException?> {
         return try {
             val result: AuthResult = auth.createUserWithEmailAndPassword(email, password).await()
             result.user?.let { firebaseUser ->
                 val user = UserDTO(
-                    name = name,
-                    username = username,
                     email = email,
                     id = firebaseUser.uid
                 )

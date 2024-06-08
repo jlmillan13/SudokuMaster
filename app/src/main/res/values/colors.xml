@@ -23,4 +23,6 @@
     <color name="alice_blue">#F7FBFE</color>
     <color name="light_sky_blue">#A7DCE5</color>
     <color name="pale_cyan_2">#A5DBE6</color>
+    <color name="black">#000000</color>
+    <color name="red_app">#D12D4E</color>
 </resources>

@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.jlmillan.sudokumaster.ui.feature.statistics.StatisticsViewModel
 
 class StatisticsFragment : Fragment() {
 
@@ -23,7 +23,7 @@ class StatisticsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
                 StatisticsScreen(viewModel)
@@ -34,12 +34,12 @@ class StatisticsFragment : Fragment() {
 
 @Composable
 fun StatisticsScreen(viewModel: StatisticsViewModel) {
-    val statistics by viewModel.statistics.observeAsState(emptyList())
+    val userStats by viewModel.userStats.observeAsState(emptyList())
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "User Statistics")
-        statistics.forEach { stat ->
-            Text(text = "User: ${stat.username}, Score: ${stat.score}, Time: ${stat.time}")
+        userStats.forEach { stat ->
+            Text(text = "Score: ${stat.score}, Time: ${stat.timeTaken}")
         }
     }
 }
