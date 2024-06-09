@@ -127,10 +127,6 @@ class LoginFragment : Fragment() {
         showToast(getString(errorResId))
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.showToolbar(false)
-    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

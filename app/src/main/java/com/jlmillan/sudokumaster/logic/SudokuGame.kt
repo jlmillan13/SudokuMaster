@@ -1,5 +1,6 @@
 package com.jlmillan.sudokumaster.logic
 
+import android.util.Log
 import kotlin.random.Random
 
 class SudokuGame {
@@ -7,13 +8,18 @@ class SudokuGame {
     private val sudokuUnsolved = Array(9) { IntArray(9) }
 
     fun createSudoku(difficulty: Int): Int {
+        Log.d("SudokuGame", "Creating Sudoku with difficulty $difficulty")
         fillDiagonal()
         fillRemaining(0, 3)
+        copyToUnsolved()
         removeKDigits(difficulty)
-        return countEmptySpaces()
+        val emptySpaces = countEmptySpaces()
+        Log.d("SudokuGame", "Sudoku created with $emptySpaces empty spaces")
+        return emptySpaces
     }
 
     fun showSudoku(): Array<IntArray> {
+        Log.d("SudokuGame", "Showing unsolved Sudoku")
         return sudokuUnsolved
     }
 
@@ -125,6 +131,14 @@ class SudokuGame {
         }
     }
 
+    private fun copyToUnsolved() {
+        for (i in sudoku.indices) {
+            for (j in sudoku[i].indices) {
+                sudokuUnsolved[i][j] = sudoku[i][j]
+            }
+        }
+    }
+
     private fun countEmptySpaces(): Int {
         var count = 0
         for (i in 0..8) {
@@ -135,5 +149,50 @@ class SudokuGame {
             }
         }
         return count
+    }
+
+    // Sudoku Solver methods added here
+
+    fun isValidMove(row: Int, col: Int, number: Int): Boolean {
+        // Verifies if the number is already in the row
+        for (i in 0..8) {
+            if (sudoku[row][i] == number) return false
+        }
+
+        // Verifies if the number is already in the column
+        for (i in 0..8) {
+            if (sudoku[i][col] == number) return false
+        }
+
+        // Verifies if the number is already in the 3x3 sub-grid
+        val startRow = row - row % 3
+        val startCol = col - col % 3
+        for (i in startRow until startRow + 3) {
+            for (j in startCol until startCol + 3) {
+                if (sudoku[i][j] == number) return false
+            }
+        }
+
+        return true
+    }
+
+    fun solveSudoku(): Boolean {
+        for (row in 0..8) {
+            for (col in 0..8) {
+                if (sudoku[row][col] == 0) {
+                    for (num in 1..9) {
+                        if (isValidMove(row, col, num)) {
+                            sudoku[row][col] = num
+                            if (solveSudoku()) {
+                                return true
+                            }
+                            sudoku[row][col] = 0
+                        }
+                    }
+                    return false
+                }
+            }
+        }
+        return true
     }
 }

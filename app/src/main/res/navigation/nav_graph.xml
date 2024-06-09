@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -24,6 +24,7 @@
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.jlmillan.sudokumaster.ui.feature.login.LoginFragment"
@@ -39,6 +40,7 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.jlmillan.sudokumaster.ui.feature.register.RegisterFragment"
@@ -52,6 +54,7 @@
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.jlmillan.sudokumaster.ui.feature.main.MainFragment"
@@ -60,9 +63,10 @@
             android:id="@+id/action_mainFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_sudokuFragment"
-            app:destination="@id/sudokuFragment" />
+            android:id="@+id/action_mainFragment_to_levelSelectionFragment"
+            app:destination="@id/levelSelectionFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.jlmillan.sudokumaster.ui.feature.statistics.StatisticsFragment"
@@ -71,12 +75,30 @@
             android:id="@+id/action_statisticsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/sudokuFragment"
         android:name="com.jlmillan.sudokumaster.ui.feature.sudoku.SudokuFragment"
         android:label="SudokuFragment" >
+        <argument
+            android:name="emptySpaces"
+            app:argType="integer"
+            app:nullable="false" />
         <action
             android:id="@+id/action_sudokuFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/levelSelectionFragment"
+        android:name="com.jlmillan.sudokumaster.ui.feature.levelselection.LevelSelectionFragment"
+        android:label="LevelSelectionFragment" >
+        <action
+            android:id="@+id/action_levelSelectionFragment_to_sudokuFragment"
+            app:destination="@id/sudokuFragment">
+        </action>
+        <action
+            android:id="@+id/action_levelSelectionFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

@@ -16,7 +16,6 @@ object CacheManager {
     fun saveUser(context: Context, userModel: UserModel) {
         val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            putString(KEY_NAME, userModel.name)
             putString(KEY_USERNAME, userModel.username)
             putString(KEY_EMAIL, userModel.email)
             putString(KEY_ID, userModel.id)
@@ -28,12 +27,11 @@ object CacheManager {
 
     fun getUser(context: Context): UserModel? {
         val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val name = sharedPreferences.getString(KEY_NAME, null) ?: return null
         val username = sharedPreferences.getString(KEY_USERNAME, null) ?: return null
         val email = sharedPreferences.getString(KEY_EMAIL, null) ?: return null
         val id = sharedPreferences.getString(KEY_ID, null) ?: return null
         val hashId = sharedPreferences.getString(KEY_HASH_ID, null) ?: return null
-        user = UserModel(name, username, email, id, hashId)
+        user = UserModel( username, email, id, hashId)
         return user
     }
 }

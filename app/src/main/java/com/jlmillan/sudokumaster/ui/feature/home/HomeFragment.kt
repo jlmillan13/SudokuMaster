@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
-import com.jlmillan.sudokumaster.ui.common.MainActivity
 import com.jlmillan.sudokumaster.databinding.FragmentHomeBinding
+import com.jlmillan.sudokumaster.ui.common.MainActivity
+
 
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null
@@ -27,11 +28,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.loadingLiveData().removeObservers(this)
-        viewModel.loadingLiveData().observe(viewLifecycleOwner) { loading ->
-            (activity as? MainActivity)?.showLoading(loading)
-        }
-
         viewModel.loggedLiveData().removeObservers(this)
         viewModel.loggedLiveData().observe(viewLifecycleOwner) { isLogged ->
             if (isLogged) {
@@ -49,10 +45,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.showToolbar(false)
-    }
+
 
     override fun onDestroyView() {
         binding = null

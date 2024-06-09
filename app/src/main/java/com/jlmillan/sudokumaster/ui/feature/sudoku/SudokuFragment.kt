@@ -1,96 +1,77 @@
 package com.jlmillan.sudokumaster.ui.feature.sudoku
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-
+import androidx.lifecycle.Observer
+import com.jlmillan.sudokumaster.R
+import com.jlmillan.sudokumaster.databinding.FragmentSudokuBinding
+import com.jlmillan.sudokumaster.logic.SudokuBoardView
+import com.jlmillan.sudokumaster.ui.common.extension.show
 
 class SudokuFragment : Fragment() {
 
+    private lateinit var binding: FragmentSudokuBinding
+    private lateinit var sudokuBoard: SudokuBoardView
+    private var selectedRow: Int? = null
+    private var selectedCol: Int? = null
     private val viewModel: SudokuViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                SudokuGameScreen(viewModel)
-            }
-        }
+        binding = FragmentSudokuBinding.inflate(inflater, container, false)
+        return binding.root
     }
-}
 
-@Composable
-fun SudokuGameScreen(viewModel: SudokuViewModel) {
-    // Implementación de la UI del juego usando Compose
-    val sudokuBoard by viewModel.sudokuBoard.observeAsState()
-    val score by viewModel.score.observeAsState(0)
-    val gameFinished by viewModel.gameFinished.observeAsState(false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    // Aquí puedes diseñar la UI usando Compose, por ejemplo:
-    Column {
-        Text(text = "Score: $score")
-        if (gameFinished) {
-            Text(text = "Game Over!")
-        } else {
-            SudokuBoard(sudokuBoard) { num, row, col ->
-                viewModel.checkInput(num, row, col)
-            }
+        sudokuBoard = binding.sudokuBoard
+        sudokuBoard.setOnCellTapListener { row, col ->
+            selectedRow = row
+            selectedCol = col
         }
-    }
-}
 
-@Composable
-fun SudokuBoard(
-    board: Array<IntArray>?,
-    onCellClicked: (num: Int, row: Int, col: Int) -> Unit
-) {
-    // Renderizar el tablero de Sudoku aquí
-    board?.let {
-        // Implementa el renderizado del tablero usando composables
-        for (row in it.indices) {
-            Row {
-                for (col in it[row].indices) {
-                    val cellValue = it[row][col]
-                    SudokuCell(cellValue) { num ->
-                        onCellClicked(num, row, col)
+        setupNumberBar()
+
+        viewModel.sudokuBoard.observe(viewLifecycleOwner,  { board ->
+            sudokuBoard.updateBoard(board)
+        })
+
+        viewModel.score.observe(viewLifecycleOwner,  { score ->
+            binding.scoreTextView.text = "Score: $score"
+        })
+
+        viewModel.gameFinished.observe(viewLifecycleOwner,  { isFinished ->
+            binding.gameFinishedTextView.show(isFinished)
+        })
+
+        // Obtener el nivel de dificultad del bundle y iniciar el juego
+        val emptySpaces = arguments?.getInt("emptySpaces") ?: 35
+        viewModel.startGame(emptySpaces)
+    }
+
+    private fun setupNumberBar() {
+        val numberBar = binding.numberBar
+        for (i in 0 until numberBar.childCount) {
+            val button = numberBar.getChildAt(i) as Button
+            button.setOnClickListener {
+                val number = button.text.toString().toInt()
+                selectedRow?.let { row ->
+                    selectedCol?.let { col ->
+                        viewModel.checkInput(number, row, col)
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-fun SudokuCell(value: Int, onClick: (Int) -> Unit) {
-    // Renderizar cada celda del Sudoku aquí
-    Box(
-        modifier = Modifier
-            .size(40.dp)
-            .border(1.dp, Color.Black)
-            .clickable { onClick(value) },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = if (value == 0) "" else value.toString())
-    }
 }

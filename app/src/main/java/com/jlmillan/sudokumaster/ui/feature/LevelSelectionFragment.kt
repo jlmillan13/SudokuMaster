@@ -1,4 +1,4 @@
-package com.jlmillan.sudokumaster.ui.feature.main
+package com.jlmillan.sudokumaster.ui.feature.levelselection
 
 import android.os.Bundle
 import androidx.compose.foundation.layout.*
@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
 
-class MainFragment : Fragment() {
+class LevelSelectionFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,14 +25,14 @@ class MainFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                MainScreen(navController = findNavController())
+                LevelSelectionScreen(navController = findNavController())
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun LevelSelectionScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -40,20 +40,32 @@ fun MainScreen(navController: NavController) {
     ) {
         Button(
             onClick = {
-                navController.navigate(R.id.action_mainFragment_to_levelSelectionFragment)
-            }
+                val bundle = Bundle().apply { putInt("emptySpaces", 35) }
+                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, bundle)
+            },
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
-            Text("Play Sudoku")
+            Text("Fácil")
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-                navController.navigate(R.id.action_mainFragment_to_statisticsFragment)
-            }
+                val bundle = Bundle().apply { putInt("emptySpaces", 45) }
+                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, bundle)
+            },
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
-            Text("View Statistics")
+            Text("Intermedio")
+        }
+
+        Button(
+            onClick = {
+                val bundle = Bundle().apply { putInt("emptySpaces", 60) }
+                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, bundle)
+            },
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
+        ) {
+            Text("Experto")
         }
     }
 }

@@ -53,9 +53,6 @@ class RegisterFragment : Fragment() {
             }
         }
         viewModel.registerLoadingLiveData().removeObservers(this)
-        viewModel.registerLoadingLiveData().observe(viewLifecycleOwner) { loading ->
-            (activity as? MainActivity)?.showLoading(loading)
-        }
 
         return binding?.root
     }
@@ -110,10 +107,6 @@ class RegisterFragment : Fragment() {
         return isValid
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.showToolbar(false)
-    }
     override fun onDestroy() {
         binding = null
         super.onDestroy()

@@ -20,29 +20,47 @@ class SudokuViewModel : ViewModel() {
     private val emptySpacesLiveData = MutableLiveData<Int>()
     val emptySpaces: LiveData<Int> get() = emptySpacesLiveData
 
+    private val selectedNumberLiveData = MutableLiveData<Int>()
+    val selectedNumber: LiveData<Int> get() = selectedNumberLiveData
+
     init {
         gameFinishedLiveData.value = false
         scoreLiveData.value = 0
+        selectedNumberLiveData.value = 1
     }
 
-    fun startGame(difficulty: Int) {
-        val emptySpaces = game.createSudoku(difficulty)
+    fun startGame(emptySpaces: Int) {
+        val emptySpacesCount = game.createSudoku(emptySpaces)
         sudokuBoardLiveData.value = game.showSudoku()
-        emptySpacesLiveData.value = emptySpaces
+        emptySpacesLiveData.value = emptySpacesCount
         scoreLiveData.value = 0
         gameFinishedLiveData.value = false
     }
 
     fun checkInput(num: Int, row: Int, col: Int) {
-        if (game.checkInput(num, row, col)) {
-            scoreLiveData.value = (scoreLiveData.value ?: 0) + 10
-            emptySpacesLiveData.value = (emptySpacesLiveData.value ?: 0) - 1
-            sudokuBoardLiveData.value = game.showSudoku()
-            if (emptySpacesLiveData.value == 0) {
-                gameFinishedLiveData.value = true
+        if (sudokuBoardLiveData.value?.get(row)?.get(col) == 0) { // Verifica que la casilla está vacía
+            if (game.checkInput(num, row, col)) {
+                scoreLiveData.value = (scoreLiveData.value ?: 0) + 10
+                val remainingEmptySpaces = (emptySpacesLiveData.value ?: 0) - 1
+                emptySpacesLiveData.value = remainingEmptySpaces
+                sudokuBoardLiveData.value = game.showSudoku()
+                if (remainingEmptySpaces == 0) {
+                    gameFinishedLiveData.value = true
+                }
+            } else {
+                scoreLiveData.value = (scoreLiveData.value ?: 0) - 2
             }
-        } else {
-            scoreLiveData.value = (scoreLiveData.value ?: 0) - 2
         }
+    }
+
+    fun solveSudoku() {
+        if (game.solveSudoku()) {
+            sudokuBoardLiveData.value = game.showSudoku()
+            gameFinishedLiveData.value = true
+        }
+    }
+
+    fun setSelectedNumber(number: Int) {
+        selectedNumberLiveData.value = number
     }
 }

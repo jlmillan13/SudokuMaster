@@ -21,7 +21,6 @@ data class UserDTO(
 
 fun UserDTO.toModel() : UserModel {
     return UserModel(
-        name = this.name.orEmpty(),
         username = this.username.orEmpty(),
         email = this.email.orEmpty(),
         id = this.id.orEmpty(),
