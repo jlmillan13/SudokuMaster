@@ -26,7 +26,7 @@ class SudokuViewModel : ViewModel() {
     init {
         gameFinishedLiveData.value = false
         scoreLiveData.value = 0
-        selectedNumberLiveData.value = 1
+        selectedNumberLiveData.value = 1 // Inicializar con el número 1 por defecto
     }
 
     fun startGame(emptySpaces: Int) {

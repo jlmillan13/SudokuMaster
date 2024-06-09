@@ -12,10 +12,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
+import com.jlmillan.sudokumaster.ui.theme.Black
+import com.jlmillan.sudokumaster.ui.theme.VeryLightBlue
 
 class MainFragment : Fragment() {
 
@@ -41,19 +47,40 @@ fun MainScreen(navController: NavController) {
         Button(
             onClick = {
                 navController.navigate(R.id.action_mainFragment_to_levelSelectionFragment)
-            }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .aspectRatio(7f)
+                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
-            Text("Play Sudoku")
+            Text(
+                text = "Play Sudoku",
+                color = Black,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
                 navController.navigate(R.id.action_mainFragment_to_statisticsFragment)
-            }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .aspectRatio(7f)
+                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
-            Text("View Statistics")
+            Text(
+                text = "View Statistics",
+                color = Black,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
     }
 }
+

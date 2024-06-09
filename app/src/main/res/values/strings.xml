@@ -40,4 +40,9 @@
     <string name="email_hint">Email</string>
     <string name="name_hint">Name</string>
     <string name="register_text">Register</string>
+    <string name="play_select_level">Play</string>
+    <string name="easy_level">Easy</string>
+    <string name="medium_level">Medium</string>
+    <string name="hard_level">Hard</string>
+    <string name="statistics_select_level">Statistics</string>
 </resources>

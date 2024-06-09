@@ -1,17 +1,19 @@
 package com.jlmillan.sudokumaster.ui.feature.sudoku
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.jlmillan.sudokumaster.R
+import com.jlmillan.sudokumaster.data.common.CacheManager
 import com.jlmillan.sudokumaster.databinding.FragmentSudokuBinding
 import com.jlmillan.sudokumaster.logic.SudokuBoardView
 import com.jlmillan.sudokumaster.ui.common.extension.show
@@ -23,11 +25,16 @@ class SudokuFragment : Fragment() {
     private var selectedRow: Int? = null
     private var selectedCol: Int? = null
     private val viewModel: SudokuViewModel by viewModels()
+    private val args: SudokuFragmentArgs by navArgs()
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var seconds = 0
+    private var isRunning = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSudokuBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -37,11 +44,15 @@ class SudokuFragment : Fragment() {
 
         sudokuBoard = binding.sudokuBoard
         sudokuBoard.setOnCellTapListener { row, col ->
-            selectedRow = row
-            selectedCol = col
+            if (viewModel.sudokuBoard.value?.get(row)?.get(col) == 0) {
+                selectedRow = row
+                selectedCol = col
+                sudokuBoard.selectCell(row, col)
+            }
         }
 
         setupNumberBar()
+        runTimer()
 
         viewModel.sudokuBoard.observe(viewLifecycleOwner, Observer { board ->
             sudokuBoard.updateBoard(board)
@@ -52,17 +63,31 @@ class SudokuFragment : Fragment() {
         })
 
         viewModel.gameFinished.observe(viewLifecycleOwner, Observer { isFinished ->
+            binding.gameFinishedTextView.show(isFinished)
             if (isFinished) {
-                binding.gameFinishedTextView.show(isFinished)
+                isRunning = false
+                saveGameResultIfBetter(args.emptySpaces)
                 findNavController().navigate(R.id.action_sudokuFragment_to_mainFragment)
-            } else {
-                binding.gameFinishedTextView.show(false)
             }
         })
 
-        // Obtener el nivel de dificultad del bundle y iniciar el juego
-        val emptySpaces = arguments?.getInt("emptySpaces") ?: 35
-        viewModel.startGame(emptySpaces)
+        // Iniciar el juego con el nivel seleccionado
+        viewModel.startGame(args.emptySpaces)
+    }
+
+    private fun runTimer() {
+        handler.post(object : Runnable {
+            override fun run() {
+                val minutes = seconds / 60
+                val secs = seconds % 60
+                val time = String.format("%02d:%02d", minutes, secs)
+                binding.timeTextView.text = "Time: $time"
+                if (isRunning) {
+                    seconds++
+                }
+                handler.postDelayed(this, 1000)
+            }
+        })
     }
 
     private fun setupNumberBar() {
@@ -74,13 +99,26 @@ class SudokuFragment : Fragment() {
                 selectedRow?.let { row ->
                     selectedCol?.let { col ->
                         viewModel.checkInput(number, row, col)
+                        if (viewModel.sudokuBoard.value?.get(row)?.get(col) != 0) {
+                            selectedRow = null
+                            selectedCol = null
+                            sudokuBoard.deselectCell()
+                        }
                     }
                 }
             }
         }
     }
 
+    private fun saveGameResultIfBetter(difficulty: Int) {
+        val currentPoints = viewModel.score.value ?: 0
+        val currentTime = seconds
+
+        CacheManager.saveGameResultIfBetter(requireContext(), currentPoints, currentTime, difficulty)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        isRunning = false
     }
 }

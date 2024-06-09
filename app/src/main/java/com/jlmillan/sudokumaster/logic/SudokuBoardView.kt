@@ -7,6 +7,10 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.compose.ui.graphics.toArgb
+import com.jlmillan.sudokumaster.ui.theme.LighterBlack
+import com.jlmillan.sudokumaster.ui.theme.TextBlack
+import com.jlmillan.sudokumaster.ui.theme.VeryLightCyan
 
 class SudokuBoardView @JvmOverloads constructor(
     context: Context,
@@ -16,25 +20,32 @@ class SudokuBoardView @JvmOverloads constructor(
 
     private var board: Array<IntArray> = Array(9) { IntArray(9) }
     private var cellSize = 0f
+    private var selectedRow = -1
+    private var selectedCol = -1
     private var cellTapListener: ((Int, Int) -> Unit)? = null
 
     private val gridPaint = Paint().apply {
-        color = Color.BLACK
+        color = LighterBlack.toArgb()
         style = Paint.Style.STROKE
-        strokeWidth = 2f // Ajusta el grosor para líneas normales
+        strokeWidth = 2f
     }
 
     private val thickGridPaint = Paint().apply {
-        color = Color.BLACK
+        color = LighterBlack.toArgb()
         style = Paint.Style.STROKE
-        strokeWidth = 6f // Ajusta el grosor para líneas gruesas
+        strokeWidth = 6f
     }
 
     private val cellPaint = Paint().apply {
-        color = Color.BLUE
+        color = TextBlack.toArgb()
         style = Paint.Style.FILL
         textSize = 64f
         textAlign = Paint.Align.CENTER
+    }
+
+    private val selectedCellPaint = Paint().apply {
+        color = VeryLightCyan.toArgb()
+        style = Paint.Style.FILL
     }
 
     fun setOnCellTapListener(listener: (Int, Int) -> Unit) {
@@ -51,6 +62,18 @@ class SudokuBoardView @JvmOverloads constructor(
         invalidate()
     }
 
+    fun selectCell(row: Int, col: Int) {
+        selectedRow = row
+        selectedCol = col
+        invalidate()
+    }
+
+    fun deselectCell() {
+        selectedRow = -1
+        selectedCol = -1
+        invalidate()
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val size = minOf(measuredWidth, measuredHeight)
@@ -62,6 +85,7 @@ class SudokuBoardView @JvmOverloads constructor(
         super.onDraw(canvas)
         drawGrid(canvas)
         drawNumbers(canvas)
+        drawSelectedCell(canvas)
     }
 
     private fun drawGrid(canvas: Canvas) {
@@ -84,6 +108,16 @@ class SudokuBoardView @JvmOverloads constructor(
                     canvas.drawText(number.toString(), x, y, cellPaint)
                 }
             }
+        }
+    }
+
+    private fun drawSelectedCell(canvas: Canvas) {
+        if (selectedRow != -1 && selectedCol != -1) {
+            val left = selectedCol * cellSize
+            val top = selectedRow * cellSize
+            val right = left + cellSize
+            val bottom = top + cellSize
+            canvas.drawRect(left, top, right, bottom, selectedCellPaint)
         }
     }
 

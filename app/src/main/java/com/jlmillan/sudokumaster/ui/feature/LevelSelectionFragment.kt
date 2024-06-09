@@ -12,10 +12,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
+import com.jlmillan.sudokumaster.ui.theme.Black
+import com.jlmillan.sudokumaster.ui.theme.VeryLightBlue
 
 class LevelSelectionFragment : Fragment() {
 
@@ -40,32 +47,65 @@ fun LevelSelectionScreen(navController: NavController) {
     ) {
         Button(
             onClick = {
-                val bundle = Bundle().apply { putInt("emptySpaces", 35) }
-                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, bundle)
+                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, Bundle().apply {
+                    putInt("emptySpaces", 35)
+                })
             },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .aspectRatio(7f)
+                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
-            Text("Fácil")
+            Text(
+                text = stringResource(R.string.easy_level),
+                color = Black,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                val bundle = Bundle().apply { putInt("emptySpaces", 45) }
-                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, bundle)
+                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, Bundle().apply {
+                    putInt("emptySpaces", 45)
+                })
             },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .aspectRatio(7f)
+                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
-            Text("Intermedio")
+            Text(
+                text = stringResource(R.string.medium_level),
+                color = Black,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                val bundle = Bundle().apply { putInt("emptySpaces", 60) }
-                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, bundle)
+                navController.navigate(R.id.action_levelSelectionFragment_to_sudokuFragment, Bundle().apply {
+                    putInt("emptySpaces", 60)
+                })
             },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .aspectRatio(7f)
+                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
-            Text("Experto")
+            Text(
+                text = stringResource(R.string.hard_level),
+                color = Black,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
     }
 }

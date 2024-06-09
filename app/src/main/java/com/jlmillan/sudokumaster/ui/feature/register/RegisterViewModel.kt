@@ -25,13 +25,4 @@ class RegisterViewModel : ViewModel() {
             registerLoadingLiveData.postValue(false)
         }
     }
-
-    private fun getErrorMessage(authError: AuthErrorException?): String {
-        return when (authError) {
-//            AuthErrorException.USER_ALREADY_EXIST -> "El usuario ya existe, debe utilizar otro nombre de usuario"
-            AuthErrorException.EMAIL_EXIST -> "El email ya existe, debe utilizar otro nombre de usuario"
-            AuthErrorException.UNKNOWN -> "Ha ocurrido un error al realizar el registro"
-            else -> "Error desconocido"
-        }
-    }
 }

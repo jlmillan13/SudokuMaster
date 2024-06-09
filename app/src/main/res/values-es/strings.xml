@@ -33,4 +33,9 @@
     <string name="repeat_email_hint">Repetir email</string>
     <string name="name_hint">Nombre</string>
     <string name="register_text">Registro</string>
+    <string name="play_select_level">Jugar</string>
+    <string name="statistics_select_level">Estadísticas</string>
+    <string name="easy_level">Fácil</string>
+    <string name="medium_level">Intermedio</string>
+    <string name="hard_level">Díficil</string>
 </resources>
