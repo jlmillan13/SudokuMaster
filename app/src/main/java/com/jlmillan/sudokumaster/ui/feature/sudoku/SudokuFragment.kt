@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
 import com.jlmillan.sudokumaster.databinding.FragmentSudokuBinding
 import com.jlmillan.sudokumaster.logic.SudokuBoardView
@@ -42,16 +43,21 @@ class SudokuFragment : Fragment() {
 
         setupNumberBar()
 
-        viewModel.sudokuBoard.observe(viewLifecycleOwner,  { board ->
+        viewModel.sudokuBoard.observe(viewLifecycleOwner, Observer { board ->
             sudokuBoard.updateBoard(board)
         })
 
-        viewModel.score.observe(viewLifecycleOwner,  { score ->
+        viewModel.score.observe(viewLifecycleOwner, Observer { score ->
             binding.scoreTextView.text = "Score: $score"
         })
 
-        viewModel.gameFinished.observe(viewLifecycleOwner,  { isFinished ->
-            binding.gameFinishedTextView.show(isFinished)
+        viewModel.gameFinished.observe(viewLifecycleOwner, Observer { isFinished ->
+            if (isFinished) {
+                binding.gameFinishedTextView.show(isFinished)
+                findNavController().navigate(R.id.action_sudokuFragment_to_mainFragment)
+            } else {
+                binding.gameFinishedTextView.show(false)
+            }
         })
 
         // Obtener el nivel de dificultad del bundle y iniciar el juego
@@ -74,4 +80,7 @@ class SudokuFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }
