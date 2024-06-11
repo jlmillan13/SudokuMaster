@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         Log.e("LIFECYCLE", "onStart")
     }
 
+    fun showLoading(loading: Boolean) {
+        binding?.mainLoading?.root?.show(loading)
+    }
+
     override fun onResume() {
         super.onResume()
         Log.e("LIFECYCLE", "onResume")

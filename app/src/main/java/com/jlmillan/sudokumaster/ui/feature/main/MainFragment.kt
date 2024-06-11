@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,13 +23,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.jlmillan.sudokumaster.R
+import com.jlmillan.sudokumaster.ui.feature.common.LoadingView
 import com.jlmillan.sudokumaster.ui.theme.Black
 import com.jlmillan.sudokumaster.ui.theme.VeryLightBlue
 
 class MainFragment : Fragment() {
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,14 +41,16 @@ class MainFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                MainScreen(navController = findNavController())
+                val loading by viewModel.stateLoading.collectAsState()
+                MainScreen(navController = findNavController(), loading = loading, viewModel = viewModel)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, loading: Boolean, viewModel: MainViewModel) {
+    val loadingAlpha = if (loading) 0.5f else 0f
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -65,6 +72,7 @@ fun MainScreen(navController: NavController) {
 
             Button(
                 onClick = {
+                    viewModel.setLoading(true) // Mostrar la animación de carga al navegar
                     navController.navigate(R.id.action_mainFragment_to_levelSelectionFragment)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
@@ -84,6 +92,7 @@ fun MainScreen(navController: NavController) {
 
             Button(
                 onClick = {
+                    viewModel.setLoading(true) // Mostrar la animación de carga al navegar
                     navController.navigate(R.id.action_mainFragment_to_statisticsFragment)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
@@ -99,5 +108,6 @@ fun MainScreen(navController: NavController) {
                 )
             }
         }
+        LoadingView(alpha = loadingAlpha)
     }
 }

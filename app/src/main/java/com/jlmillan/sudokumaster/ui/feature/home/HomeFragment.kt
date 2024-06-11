@@ -28,6 +28,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpObservers() {
+        viewModel.loadingLiveData().removeObservers(this)
+        viewModel.loadingLiveData().observe(viewLifecycleOwner) { loading ->
+            (activity as? MainActivity)?.showLoading(loading)
+        }
         viewModel.loggedLiveData().removeObservers(this)
         viewModel.loggedLiveData().observe(viewLifecycleOwner) { isLogged ->
             if (isLogged) {
