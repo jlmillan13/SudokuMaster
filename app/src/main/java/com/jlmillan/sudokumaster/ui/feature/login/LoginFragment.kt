@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -49,11 +50,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -67,8 +71,10 @@ import com.jlmillan.sudokumaster.ui.common.extension.validateEmail
 import com.jlmillan.sudokumaster.ui.feature.common.LoadingView
 import com.jlmillan.sudokumaster.ui.theme.BackgroundInput
 import com.jlmillan.sudokumaster.ui.theme.Black
+import com.jlmillan.sudokumaster.ui.theme.EditTextBackgroundColor
 import com.jlmillan.sudokumaster.ui.theme.LighterBlack
 import com.jlmillan.sudokumaster.ui.theme.TextDescription
+import com.jlmillan.sudokumaster.ui.theme.TitleColor
 import com.jlmillan.sudokumaster.ui.theme.VeryLightBlue
 
 
@@ -127,7 +133,6 @@ class LoginFragment : Fragment() {
         showToast(getString(errorResId))
     }
 
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun CustomTextField(
@@ -175,6 +180,7 @@ class LoginFragment : Fragment() {
             }
         }
     }
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     @Preview
     fun LoginScreen() {
@@ -203,49 +209,79 @@ class LoginFragment : Fragment() {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(R.string.login_button),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.ExtraBold
+                text = stringResource(R.string.login_login),
+                fontSize = 36.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                color = TitleColor
             )
+            Column(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+            ) {
 
-            Spacer(modifier = Modifier.height(20.dp))
+                TextField(
+                    maxLines = 1,
+                    value = username,
+                    onValueChange = {
+                        username = it
+                    },
+                    label = { Text(stringResource(id = R.string.email_hint)) },
+                    isError = emailError,
 
-            CustomTextField(
-                value = username,
-                onValueChange = {
-                    username = it
-                    // Reinicia el error cuando se comienza a escribir
-                    emailError = false
-                },
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .background(EditTextBackgroundColor),
+                    colors = TextFieldDefaults.colors(
+                        disabledTextColor = Color.Transparent,
+                        focusedContainerColor = containerColor,
+                        unfocusedContainerColor = containerColor,
+                        disabledContainerColor = containerColor,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                    )
+                )
+                TextField(
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Password
+                    ),
+                    visualTransformation = PasswordVisualTransformation(),
+                    maxLines = 1,
+                    value = password,
+                    onValueChange = {
+                        password = it
+                        passwordError = false
 
-                label = stringResource(R.string.email_hint),
-                isError = emailError
-            )
+                    },
+                    label = { Text(stringResource(id = R.string.login_password)) },
 
-            Spacer(modifier = Modifier.height(10.dp))
+                    isError = passwordError,
 
-            CustomTextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                    passwordError = false
-                },
-                label = stringResource(R.string.password_hint),
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        checkEmailAndPasswordError()
-                    }
-                ),
-                isError = passwordError
-            )
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .background(EditTextBackgroundColor),
+                    colors = TextFieldDefaults.colors(
+                        disabledTextColor = Color.Transparent,
+                        focusedContainerColor = containerColor,
+                        unfocusedContainerColor = containerColor,
+                        disabledContainerColor = containerColor,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                    )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-
+                )
+            }
             Button(
                 onClick = {
                     if (checkEmailAndPasswordError().not()) {
