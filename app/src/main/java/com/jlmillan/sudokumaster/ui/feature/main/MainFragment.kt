@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -42,18 +43,18 @@ class MainFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val loading by viewModel.stateLoading.collectAsState()
-                MainScreen(navController = findNavController(), loading = loading, viewModel = viewModel)
+                viewModel.setLoading(false)
+                MainScreen(navController = findNavController(), loading = loading)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(navController: NavController, loading: Boolean, viewModel: MainViewModel) {
+fun MainScreen(navController: NavController, loading: Boolean) {
     val loadingAlpha = if (loading) 0.5f else 0f
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Image(
             painter = painterResource(id = R.drawable.fondosudoku),
@@ -72,7 +73,6 @@ fun MainScreen(navController: NavController, loading: Boolean, viewModel: MainVi
 
             Button(
                 onClick = {
-                    viewModel.setLoading(true) // Mostrar la animación de carga al navegar
                     navController.navigate(R.id.action_mainFragment_to_levelSelectionFragment)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),
@@ -92,7 +92,6 @@ fun MainScreen(navController: NavController, loading: Boolean, viewModel: MainVi
 
             Button(
                 onClick = {
-                    viewModel.setLoading(true) // Mostrar la animación de carga al navegar
                     navController.navigate(R.id.action_mainFragment_to_statisticsFragment)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = VeryLightBlue),

@@ -93,19 +93,15 @@ class LoginFragment : Fragment() {
             setContent {
                 val stateSuccess by viewModel.stateSuccess.collectAsStateWithLifecycle()
                 val stateLoading by viewModel.stateLoading.collectAsStateWithLifecycle()
-                Log.e("Login_state", "Recomposition")
                 when {
                     stateSuccess.first -> {
-                        Log.e("Login_state", "Login ok")
                         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
                     }
                     stateSuccess.second != null -> {
-                        Log.e("Login_state", "Login ko")
                         LoginScreenIdle(stateLoading = stateLoading)
                         showError(stateSuccess.second ?: AuthErrorException.UNKNOWN)
                     }
                     else -> {
-                        Log.e("Login_state", "Waiting login: $stateLoading")
                         LoginScreenIdle(stateLoading = stateLoading)
                     }
                 }
